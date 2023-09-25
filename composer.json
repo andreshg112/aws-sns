@@ -1,7 +1,7 @@
 {
     "name": "andreshg112/aws-sns",
-    "description": "Amazon SNS Notifications Channel for Laravel 5.3",
-    "homepage": "https://github.com/lab123ti/aws-sns",
+    "description": "Amazon SNS Notifications Channel for Laravel 6",
+    "homepage": "https://github.com/andreshg112/aws-sns",
     "license": "MIT",
     "authors": [
         {

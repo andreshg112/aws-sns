@@ -1,4 +1,4 @@
-# Amazon SNS Notifications Channel for Laravel 5.3 [WIP]
+# Amazon SNS Notifications Channel for Laravel 6
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/lab123/aws-sns.svg?style=flat-square)](https://packagist.org/packages/lab123/aws-sns)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
@@ -29,7 +29,7 @@ This package makes it easy to send notifications using [Amazon SNS](https://aws.
 Can to install with commands:
 
 	composer require lab123/aws-sns:dev-master
-	
+
 Or editing the `composer.json` file:
 
 	"require": {
@@ -46,15 +46,15 @@ configure in `config/app.php`:
 	    ...
 	    Lab123\AwsSns\AwsSnsServiceProvider::class,
 	]
-	
+
 **Lumen 5.x**
 
 configure in `bootstrap/app.php`:
 
 	$app->register(\Lab123\AwsSns\AwsSnsLumenServiceProvider::class);
 
-** Note: ** You go need make a wrapper [Laravel Notification](https://laracasts.com/discuss/channels/lumen/notification-in-lumen-53 "Laravel Notification") or use a package how 
-[Lumen Notification](https://packagist.org/packages/lab123/lumen-notification "Lumen Notification") 
+** Note: ** You go need make a wrapper [Laravel Notification](https://laracasts.com/discuss/channels/lumen/notification-in-lumen-53 "Laravel Notification") or use a package how
+[Lumen Notification](https://packagist.org/packages/lab123/lumen-notification "Lumen Notification")
 
 ### Setting up the AwsSns service
 
@@ -69,7 +69,7 @@ Create a new sns section inside `config/services.php`:
 	    'region' => env('SNS_REGION', 'us-east-1')
 	],
 	...
-	
+
 Next we need to add this keys to our Laravel environment. Edit file `.env` to config the keys:
 
 	...
@@ -83,7 +83,7 @@ Next we need to add this keys to our Laravel environment. Edit file `.env` to co
 You also can config defaults attributes for sending SMS running `php artisan vendor:publish --provider="Lab123\AwsSns\AwsSnsServiceProvider"` or creating file `config/aws-sns.php`:
 
 	return [
-	    
+
 	    'sms' => [
 	        'monthlySpendLimit' => env('SNS_SMS_MONTHLY_LIMIT'),
 	        'deliveryStatusIAMRole' => env('SNS_SMS_DELIVERY_STATUS_IAM_ROLE'),
@@ -93,7 +93,7 @@ You also can config defaults attributes for sending SMS running `php artisan ven
 	        'usageReportS3Bucket' => env('SNS_SMS_REPORT_S3')
 	    ]
 	]
-	
+
 And now you can set your default configuration for SMS in `.env`
 
 ** Note: ** More information how they work the settings at http://docs.aws.amazon.com/en/sns/latest/api/API_SetSMSAttributes.html
@@ -108,7 +108,7 @@ To send sms without the need to create a topic, leave the `function via` as foll
     /**
      * Get the notification channels.
      *
-     * @param mixed $notifiable            
+     * @param mixed $notifiable
      * @return array|string
      */
     public function via($notifiable)
@@ -124,15 +124,15 @@ Add function `toAwsSnsSms()` expected by class `AwsSnsSmsChannel` to send notifi
 	/**
      * Get the AWS SNS SMS Message representation of the notification.
      *
-     * @param mixed $notifiable            
+     * @param mixed $notifiable
      * @return \Lab123\AwsSns\Messages\AwsSnsMessage
      */
     public function toAwsSnsSms($notifiable)
     {
         return (new AwsSnsMessage())->message('Message Here')->phoneNumber('+5511999999999');
     }
-    
-You also can ignore the `->phoneNumber()` in your notification and use function `routeNotificationForAwsSnsSms` in your Model Notifiable: 
+
+You also can ignore the `->phoneNumber()` in your notification and use function `routeNotificationForAwsSnsSms` in your Model Notifiable:
 
 	// Models/User.php
 	/**
@@ -145,9 +145,9 @@ You also can ignore the `->phoneNumber()` in your notification and use function 
         return $this->phone_number;
     }
 
-**Note.: ** The expected number use the standards-based international [E.123](https://en.wikipedia.org/wiki/E.123) 
+**Note.: ** The expected number use the standards-based international [E.123](https://en.wikipedia.org/wiki/E.123)
 
-**eg.:** +5511999999999 
+**eg.:** +5511999999999
 
 ### Sending Topic ###
 
@@ -157,7 +157,7 @@ To send notification to a topic, leave the `function via` as follows:
     /**
      * Get the notification channels.
      *
-     * @param mixed $notifiable            
+     * @param mixed $notifiable
      * @return array|string
      */
     public function via($notifiable)
@@ -173,15 +173,15 @@ Add function `toAwsSnsTopic()` expected by class `AwsSnsTopicChannel` to send no
 	/**
      * Get the AWS SNS Topic Message representation of the notification.
      *
-     * @param mixed $notifiable            
+     * @param mixed $notifiable
      * @return \Lab123\AwsSns\Messages\AwsSnsMessage
      */
     public function toAwsSnsTopic($notifiable)
     {
         return (new AwsSnsMessage())->message('Message Here')->topicArn('arn:aws:sns:us-east-1:000000000000:name-topic');
     }
-    
-You also can ignore the `->topicArn()` in your notification and use function `routeNotificationForAwsSnsTopic` in your Model Notifiable: 
+
+You also can ignore the `->topicArn()` in your notification and use function `routeNotificationForAwsSnsTopic` in your Model Notifiable:
 
 	// Models/User.php
 	/**
